@@ -14,6 +14,15 @@ export default function HomeScreen({ exploredLetters, onModeSelect }: HomeScreen
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[100dvh] px-4 py-6 bg-[var(--color-bg)]">
+      {/* Back to Hub */}
+      <a
+        href="/"
+        className="absolute top-4 left-4 w-12 h-12 rounded-2xl bg-white/80 shadow-md flex items-center justify-center text-2xl focus:outline-none focus:ring-4 focus:ring-blue-300"
+        aria-label="Back to Kids Corner"
+      >
+        &#x1F3E0;
+      </a>
+
       {/* Mute Toggle */}
       <button
         onClick={toggleMute}
