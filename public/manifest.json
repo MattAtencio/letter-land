@@ -2,7 +2,7 @@
   "name": "Letter Land",
   "short_name": "Letter Land",
   "description": "A fun, interactive alphabet learning app for kids ages 3-6",
-  "start_url": "/",
+  "start_url": "/letter-land",
   "display": "standalone",
   "background_color": "#FFF8F0",
   "theme_color": "#FF6B6B",
