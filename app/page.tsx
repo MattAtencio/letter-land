@@ -4,16 +4,16 @@ import { useState, useEffect, useCallback } from "react";
 import HomeScreen from "@/components/HomeScreen";
 import ExploreMode from "@/components/ExploreMode";
 import LearnMode from "@/components/LearnMode";
-import { AudioProvider, useAudio } from "@/components/AudioContext";
+import { useSoundEffects } from "@kids-games/core/voice";
 
 type AppMode = "home" | "explore" | "learn";
 
-function AppContent() {
+export default function Page() {
   const [mode, setMode] = useState<AppMode>("home");
   const [exploredLetters, setExploredLetters] = useState<Set<string>>(new Set());
   const [learnedLetters, setLearnedLetters] = useState<Set<string>>(new Set());
   const [learnPosition, setLearnPosition] = useState(0);
-  const { playPop } = useAudio();
+  const { playPop } = useSoundEffects();
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -80,13 +80,5 @@ function AppContent() {
       exploredLetters={exploredLetters}
       onModeSelect={handleModeSelect}
     />
-  );
-}
-
-export default function Page() {
-  return (
-    <AudioProvider>
-      <AppContent />
-    </AudioProvider>
   );
 }

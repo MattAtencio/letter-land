@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect, useRef } from "react";
 import { LETTERS } from "@/data/letters";
-import { useAudio } from "./AudioContext";
+import { useVoice, useSoundEffects } from "@kids-games/core/voice";
 import { getIllustration } from "./illustrations";
 
 interface LearnModeProps {
@@ -13,6 +13,16 @@ interface LearnModeProps {
   onBack: () => void;
 }
 
+function letterPhrases(char: string) {
+  const c = char.toLowerCase();
+  return [
+    { id: `letter-${c}`, persona: "maple" as const },
+    { id: `phonetic-${c}`, persona: "maple" as const },
+    { id: `word-${c}`, persona: "maple" as const },
+    { id: `sentence-${c}`, persona: "maple" as const },
+  ];
+}
+
 export default function LearnMode({
   learnedLetters,
   onLearned,
@@ -21,7 +31,8 @@ export default function LearnMode({
   onBack,
 }: LearnModeProps) {
   const [currentIndex, setCurrentIndex] = useState(Math.min(startPosition, LETTERS.length - 1));
-  const { speakSequence, cancelSpeech, playPop, muted } = useAudio();
+  const { playSequence, cancel } = useVoice();
+  const { playPop } = useSoundEffects();
   const touchStartX = useRef(0);
   const hasAutoPlayed = useRef<number | null>(null);
 
@@ -33,29 +44,27 @@ export default function LearnMode({
     hasAutoPlayed.current = currentIndex;
     const l = LETTERS[currentIndex];
     onLearned(l.char);
-    if (!muted) {
-      const timer = setTimeout(() => {
-        speakSequence([l.char, l.phonetic, l.word, l.sentence]);
-      }, 300);
-      return () => clearTimeout(timer);
-    }
-  }, [currentIndex, speakSequence, onLearned, muted]);
+    const timer = setTimeout(() => {
+      playSequence(letterPhrases(l.char));
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [currentIndex, playSequence, onLearned]);
 
   const goTo = useCallback(
     (index: number) => {
-      cancelSpeech();
+      cancel();
       playPop();
       const clamped = Math.max(0, Math.min(LETTERS.length - 1, index));
       setCurrentIndex(clamped);
       onPositionChange(clamped);
     },
-    [cancelSpeech, playPop, onPositionChange]
+    [cancel, playPop, onPositionChange]
   );
 
   const handleReplay = useCallback(() => {
     playPop();
-    speakSequence([letter.char, letter.phonetic, letter.word, letter.sentence]);
-  }, [playPop, speakSequence, letter]);
+    playSequence(letterPhrases(letter.char));
+  }, [playPop, playSequence, letter]);
 
   // Swipe handling
   const handleTouchStart = useCallback((e: React.TouchEvent) => {

@@ -1,6 +1,7 @@
 "use client";
 
-import { useAudio } from "./AudioContext";
+import { useVoice } from "@kids-games/core/voice";
+import { MuteButton } from "@kids-games/core/components";
 import { LETTERS } from "@/data/letters";
 import AlphabetTrain from "./AlphabetTrain";
 
@@ -10,8 +11,6 @@ interface HomeScreenProps {
 }
 
 export default function HomeScreen({ exploredLetters, onModeSelect }: HomeScreenProps) {
-  const { muted, toggleMute } = useAudio();
-
   return (
     <div className="flex flex-col items-center justify-center min-h-[100dvh] px-4 py-6 bg-[var(--color-bg)]">
       {/* Back to Hub */}
@@ -24,13 +23,7 @@ export default function HomeScreen({ exploredLetters, onModeSelect }: HomeScreen
       </a>
 
       {/* Mute Toggle */}
-      <button
-        onClick={toggleMute}
-        className="absolute top-4 right-4 w-12 h-12 rounded-2xl bg-white/80 shadow-md flex items-center justify-center text-2xl focus:outline-none focus:ring-4 focus:ring-blue-300"
-        aria-label={muted ? "Unmute sound" : "Mute sound"}
-      >
-        {muted ? "🔇" : "🔊"}
-      </button>
+      <MuteButton />
 
       {/* Title */}
       <div className="mb-8 text-center">

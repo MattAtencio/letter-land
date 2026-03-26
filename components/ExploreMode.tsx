@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect } from "react";
 import { LETTERS, type LetterData } from "@/data/letters";
-import { useAudio } from "./AudioContext";
+import { useVoice, useSoundEffects } from "@kids-games/core/voice";
 import LetterCard from "./LetterCard";
 import { getIllustration } from "./illustrations";
 
@@ -15,7 +15,8 @@ interface ExploreModeProps {
 export default function ExploreMode({ exploredLetters, onExplore, onBack }: ExploreModeProps) {
   const [selectedLetter, setSelectedLetter] = useState<LetterData | null>(null);
   const [bouncing, setBouncing] = useState<string | null>(null);
-  const { playPop, speakSequence, cancelSpeech } = useAudio();
+  const { playSequence, cancel } = useVoice();
+  const { playPop } = useSoundEffects();
 
   const handleTileTap = useCallback(
     (letter: LetterData) => {
@@ -24,15 +25,20 @@ export default function ExploreMode({ exploredLetters, onExplore, onBack }: Expl
       setTimeout(() => setBouncing(null), 200);
       setSelectedLetter(letter);
       onExplore(letter.char);
-      speakSequence([letter.char, letter.phonetic, letter.word]);
+      const c = letter.char.toLowerCase();
+      playSequence([
+        { id: `letter-${c}`, persona: "maple" },
+        { id: `phonetic-${c}`, persona: "maple" },
+        { id: `word-${c}`, persona: "maple" },
+      ]);
     },
-    [playPop, onExplore, speakSequence]
+    [playPop, onExplore, playSequence]
   );
 
   const handleDismiss = useCallback(() => {
-    cancelSpeech();
+    cancel();
     setSelectedLetter(null);
-  }, [cancelSpeech]);
+  }, [cancel]);
 
   // Handle escape key
   useEffect(() => {

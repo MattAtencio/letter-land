@@ -2,7 +2,7 @@
 
 import { useRef, useCallback } from "react";
 import type { LetterData } from "@/data/letters";
-import { useAudio } from "./AudioContext";
+import { useVoice, useSoundEffects } from "@kids-games/core/voice";
 import { getIllustration } from "./illustrations";
 
 interface LetterCardProps {
@@ -21,7 +21,8 @@ export default function LetterCard({
   onNext,
 }: LetterCardProps) {
   const touchStartY = useRef(0);
-  const { speakSequence, playPop } = useAudio();
+  const { playSequence } = useVoice();
+  const { playPop } = useSoundEffects();
 
   const handleBackdropClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
@@ -48,8 +49,13 @@ export default function LetterCard({
 
   const handleReplay = useCallback(() => {
     playPop();
-    speakSequence([letter.char, letter.phonetic, letter.word]);
-  }, [playPop, speakSequence, letter]);
+    const c = letter.char.toLowerCase();
+    playSequence([
+      { id: `letter-${c}`, persona: "maple" },
+      { id: `phonetic-${c}`, persona: "maple" },
+      { id: `word-${c}`, persona: "maple" },
+    ]);
+  }, [playPop, playSequence, letter]);
 
   return (
     <div
