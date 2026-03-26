@@ -44,3 +44,6 @@ public/workbox-*.js
 public/sw.js.map
 public/workbox-*.js.map
 public/swe-worker-*.js
+
+# Nested repo copy
+letter-land/
