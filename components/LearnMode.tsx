@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect, useRef } from "react";
 import { LETTERS } from "@/data/letters";
 import { useVoice, useSoundEffects } from "@kids-games/core/voice";
 import { getIllustration } from "./illustrations";
+import { BackToHub } from "./BackToHub";
 
 interface LearnModeProps {
   learnedLetters: Set<string>;
@@ -102,8 +103,9 @@ export default function LearnMode({
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
-      {/* Header */}
-      <div className="flex items-center px-4 py-3 shrink-0">
+      <BackToHub />
+      {/* Header — pl-16 clears the fixed BackToHub button */}
+      <div className="flex items-center pl-16 pr-4 py-3 shrink-0">
         <button
           onClick={onBack}
           className="w-12 h-12 rounded-2xl bg-white/80 shadow-md flex items-center justify-center text-2xl focus:outline-none focus:ring-4 focus:ring-blue-300"
